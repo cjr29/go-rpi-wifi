@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build for Raspberry Pi (arm64)",
+			"type": "shell",
+			"command": "go build -o go-rpi-wifi",
+			"options": {
+				"env": {
+					"GOOS": "linux",
+					"GOARCH": "arm64",
+					"CGO_ENABLED": "0"
+				}
+			},
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": []
+		},
+	]
+}

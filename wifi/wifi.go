@@ -109,7 +109,7 @@ func (w *Wifi) IsConnectedToNetwork() bool {
 
 // Return true if we are currently running as an access point.
 func (w *Wifi) IsAccessPoint() bool {
-	return (strings.ToLower(w.winfo.HWAddr) == strings.ToLower(w.winfo.APAddr) &&
+	return (strings.EqualFold(w.winfo.HWAddr, w.winfo.APAddr) &&
 		w.winfo.ESSID == w.apName)
 }
 

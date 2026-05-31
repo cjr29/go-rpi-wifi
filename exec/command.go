@@ -3,7 +3,7 @@ package exec
 ////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"io/ioutil"
+	"io"
 	"os/exec"
 )
 
@@ -30,11 +30,11 @@ func RunCommand(cmd string, opts ...string) ([]byte, []byte, error) {
 	}
 
 	// Flush the pipes.
-	stderr, err := ioutil.ReadAll(errPipe)
+	stderr, err := io.ReadAll(errPipe)
 	if err != nil {
 		return nil, nil, err
 	}
-	stdout, err := ioutil.ReadAll(stdPipe)
+	stdout, err := io.ReadAll(stdPipe)
 	if err != nil {
 		return nil, nil, err
 	}
