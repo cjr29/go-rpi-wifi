@@ -129,38 +129,40 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
-	// Execute the Linux iwlist scan command targeting the wireless interface (wlan0)
-	// stdout, _, err := exec.RunCommand("sudo", "iwlist", "wlan0", "scanning")
+func (w *Wifi) GetAvailableNetworks() ([]string, error) {
+	availableSSID := []string{}
+
+	// Execute the Linux network manager command to list available Wi-Fi networks.
 	stdout, _, err := exec.RunCommand("sudo", "nmcli", "dev", "wifi", "list")
 	if err != nil {
 		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
 
-	// // Regular expression to extract the SSID (Network Name)
-	// re := regexp.MustCompile(`ESSID:"([^"]+)"`)
-	// matches := re.FindAllStringSubmatch(string(stdout), -1)
+	// Regular expression to extract the SSID (Network Name)
+	re := regexp.MustCompile(`ESSID:"([^"]+)"`)
+	matches := re.FindAllStringSubmatch(string(stdout), -1)
 
-	// // Filter unique networks and build result
-	// availableNetworks := make(map[string]bool)
-	// var b strings.Builder
+	// Filter unique networks and build result
+	availableNetworks := make(map[string]bool)
+	log.Println("Available Wi-Fi Networks:")
 
-	// for _, match := range matches {
-	// 	if len(match) > 1 {
-	// 		ssid := strings.TrimSpace(match[1])
-	// 		if ssid != "" && !availableNetworks[ssid] {
-	// 			availableNetworks[ssid] = true
-	// 			b.WriteString(ssid)
-	// 			b.WriteString("\n")
-	// 		}
-	// 	}
-	// }
-
-	if len(stdout) == 0 {
-		return nil, nil
+	for _, match := range matches {
+		if len(match) > 1 {
+			ssid := strings.TrimSpace(match[1])
+			// Only print non-empty, unique SSIDs
+			if ssid != "" && !availableNetworks[ssid] {
+				availableNetworks[ssid] = true
+				log.Printf("- %s\n", ssid)
+				availableSSID = append(availableSSID, ssid)
+			}
+		}
 	}
 
-	return stdout, nil
+	if len(availableNetworks) == 0 {
+		log.Println("No networks found. Check if your Wi-Fi interface is up.")
+	}
+
+	return availableSSID, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
