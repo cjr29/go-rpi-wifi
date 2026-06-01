@@ -4,10 +4,8 @@ package main
 
 import (
 	"fmt"
+	"go-rpi-wifi/exec"
 	"strings"
-	// "os"
-
-	"github.com/sabhiram/go-rpi-wifi/exec"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
