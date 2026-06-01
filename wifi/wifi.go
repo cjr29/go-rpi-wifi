@@ -128,20 +128,19 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
+func (w *Wifi) GetAvailableNetworks() (string, error) {
 	var (
 		err    error
 		stdout []byte
 	)
 	stdout, _, err = exec.RunCommand("nmcli", "dev wifi list")
-	// stdout, _, err = exec.RunCommand("ifconfig", w.iface)
 	if err != nil {
 		log.Printf("Error encountered while running nmcli: %s\n", err.Error())
-		return nil, err
+		return "Error running nmcli, ", err
 	} else {
-		log.Printf("nmcli output: %s\n", string(stdout))
+		log.Printf("nmcli output: %s\n", stdout)
 	}
-	return stdout, nil
+	return string(stdout[0]), nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
