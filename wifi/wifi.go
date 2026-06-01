@@ -163,6 +163,8 @@ func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 		log.Println("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
+	log.Printf("Length of stdout: %d\n", len(stdout))
+
 	return stdout, nil
 }
 
