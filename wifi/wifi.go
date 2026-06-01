@@ -61,12 +61,13 @@ func (w *Wifi) updateWifiInfo() error {
 		if m := reHwAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.HWAddr = string(m[0][1])
 		}
-
+		log.Printf("Extracted hw addr: %s\n", w.winfo.HWAddr)
 		// Extract the inet address
 		reInetAddr := regexp.MustCompile(`inet addr:([^\s]+)`)
 		if m := reInetAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.InetAddr = string(m[0][1])
 		}
+		log.Printf("Extracted inet addr: %s\n", w.winfo.InetAddr)
 	}
 
 	// Run iwconfig
@@ -74,23 +75,25 @@ func (w *Wifi) updateWifiInfo() error {
 	if err != nil {
 		return err
 	} else {
+		log.Printf("iwconfig output: %s\n", string(stdout))
 		// Extract the access point name (upstream)
 		reAPAddr := regexp.MustCompile(`Access Point:\s([^\s]+)`)
 		if m := reAPAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.APAddr = string(m[0][1])
 		}
-
+		log.Printf("Extracted AP addr: %s\n", w.winfo.APAddr)
 		// Extract the ESSID
 		reESSID := regexp.MustCompile(`ESSID:\"([^\"]+)\"`)
 		if m := reESSID.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.ESSID = string(m[0][1])
 		}
-
+		log.Printf("Extracted ESSID: %s\n", w.winfo.ESSID)
 		// Check is un-associated still
 		reUnassoc := regexp.MustCompile(`(unassociated)\s+Nick`)
 		if m := reUnassoc.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.IsUnassociated = true
 		}
+		log.Printf("Extracted is unassociated: %t\n", w.winfo.IsUnassociated)
 	}
 
 	return nil
