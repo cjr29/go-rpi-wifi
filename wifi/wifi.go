@@ -133,11 +133,11 @@ func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 		err    error
 		stdout []byte
 	)
-	stdout, _, err = exec.RunCommand("nmcli dev wifi list", w.iface)
+	stdout, _, err = exec.RunCommand("sudo nmcli dev wifi list", w.iface)
 	if err != nil {
 		return nil, err
 	} else {
-		log.Printf("sudo nmcli output: %s\n", string(stdout))
+		log.Printf("nmcli output: %s\n", string(stdout))
 	}
 	return stdout, nil
 }
