@@ -5,6 +5,7 @@ package main
 import (
 	"go-rpi-wifi/wifi"
 	"log"
+	"strings"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,11 +35,20 @@ func main() {
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
-		log.Printf("Available networks:\n%s", string(availableSSID))
+		// availableSSID is [][]byte; convert each to string for printing
+		ss := make([]string, 0, len(availableSSID))
+		for _, b := range availableSSID {
+			ss = append(ss, string(b))
+		}
+		log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
 	}
 	availableSSID, err := w.GetAvailableNetworks()
 	fatalOnErr(err)
-	log.Printf("Available networks:\n%s", string(availableSSID))
+	ss := make([]string, 0, len(availableSSID))
+	for _, b := range availableSSID {
+		ss = append(ss, string(b))
+	}
+	log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
 }
 
 func init() {

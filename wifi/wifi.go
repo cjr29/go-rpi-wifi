@@ -3,6 +3,7 @@ package wifi
 ////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"bytes"
 	"fmt"
 	"go-rpi-wifi/exec"
 	"log"
@@ -129,8 +130,8 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
-	// availableSSID := []string{}
+func (w *Wifi) GetAvailableNetworks() ([][]byte, error) {
+	availableSSIDs := [][]byte{}
 
 	// Execute the Linux network manager command to list available Wi-Fi networks.
 	// sudo nmcli --get-value SSID dev wifi list
@@ -139,33 +140,12 @@ func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
 
-	// // Regular expression to extract the SSID (Network Name)
-	// re := regexp.MustCompile(`ESSID:"([^"]+)"`)
-	// matches := re.FindAllStringSubmatch(string(stdout), -1)
-
-	// // Filter unique networks and build result
-	// availableNetworks := make(map[string]bool)
-	// log.Println("Available Wi-Fi Networks:")
-
-	// for _, match := range matches {
-	// 	if len(match) > 1 {
-	// 		ssid := strings.TrimSpace(match[1])
-	// 		// Only print non-empty, unique SSIDs
-	// 		if ssid != "" && !availableNetworks[ssid] {
-	// 			availableNetworks[ssid] = true
-	// 			log.Printf("- %s\n", ssid)
-	// 			availableSSID = append(availableSSID, ssid)
-	// 		}
-	// 	}
-	// }
-
 	if len(stdout) == 0 {
 		log.Println("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
 	log.Printf("Length of stdout: %d\n", len(stdout))
+	availableSSIDs = bytes.Split(stdout, []byte("\n"))
 
-	return stdout, nil
+	return availableSSIDs, nil
 }
-
-////////////////////////////////////////////////////////////////////////////////
