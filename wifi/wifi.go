@@ -129,38 +129,38 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() (string, error) {
+func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 	// Execute the Linux iwlist scan command targeting the wireless interface (wlan0)
 	// stdout, _, err := exec.RunCommand("sudo", "iwlist", "wlan0", "scanning")
 	stdout, _, err := exec.RunCommand("sudo", "nmcli", "dev", "wifi", "list")
 	if err != nil {
-		return "", fmt.Errorf("failed to scan networks: %w", err)
+		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
 
-	// Regular expression to extract the SSID (Network Name)
-	re := regexp.MustCompile(`ESSID:"([^"]+)"`)
-	matches := re.FindAllStringSubmatch(string(stdout), -1)
+	// // Regular expression to extract the SSID (Network Name)
+	// re := regexp.MustCompile(`ESSID:"([^"]+)"`)
+	// matches := re.FindAllStringSubmatch(string(stdout), -1)
 
-	// Filter unique networks and build result
-	availableNetworks := make(map[string]bool)
-	var b strings.Builder
+	// // Filter unique networks and build result
+	// availableNetworks := make(map[string]bool)
+	// var b strings.Builder
 
-	for _, match := range matches {
-		if len(match) > 1 {
-			ssid := strings.TrimSpace(match[1])
-			if ssid != "" && !availableNetworks[ssid] {
-				availableNetworks[ssid] = true
-				b.WriteString(ssid)
-				b.WriteString("\n")
-			}
-		}
+	// for _, match := range matches {
+	// 	if len(match) > 1 {
+	// 		ssid := strings.TrimSpace(match[1])
+	// 		if ssid != "" && !availableNetworks[ssid] {
+	// 			availableNetworks[ssid] = true
+	// 			b.WriteString(ssid)
+	// 			b.WriteString("\n")
+	// 		}
+	// 	}
+	// }
+
+	if len(stdout) == 0 {
+		return nil, nil
 	}
 
-	if len(availableNetworks) == 0 {
-		return "", nil
-	}
-
-	return b.String(), nil
+	return stdout, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
