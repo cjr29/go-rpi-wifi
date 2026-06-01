@@ -131,7 +131,8 @@ func (w *Wifi) RescanInfo() error {
 
 func (w *Wifi) GetAvailableNetworks() (string, error) {
 	// Execute the Linux iwlist scan command targeting the wireless interface (wlan0)
-	stdout, _, err := exec.RunCommand("sudo", "iwlist", "wlan0", "scanning")
+	// stdout, _, err := exec.RunCommand("sudo", "iwlist", "wlan0", "scanning")
+	stdout, _, err := exec.RunCommand("sudo", "nmcli", "dev", "wifi", "list")
 	if err != nil {
 		return "", fmt.Errorf("failed to scan networks: %w", err)
 	}
