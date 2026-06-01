@@ -30,7 +30,9 @@ func main() {
 	if w.IsConnectedToNetwork() {
 		log.Printf("Connected to wireless network with IP: %s\n", w.GetIP())
 	} else {
-		log.Printf("Not connected to WIFI - TOOD: Enable AP here!\n")
+		log.Printf("Not connected to WIFI - ToDo: Enable AP here!\n")
+		// Call function to get list if available networks and connect to one of them.
+
 	}
 }
 
