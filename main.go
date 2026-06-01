@@ -34,12 +34,11 @@ func main() {
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
-		log.Printf("Available networks: %s\n", availableSSID)
+		log.Printf("Available networks:\n%s", string(availableSSID))
 	}
 	availableSSID, err := w.GetAvailableNetworks()
 	fatalOnErr(err)
-	log.Printf("Available networks: %s\n", availableSSID)
-
+	log.Printf("Available networks:\n%s", string(availableSSID))
 }
 
 func init() {
