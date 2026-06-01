@@ -4,6 +4,7 @@ package wifi
 
 import (
 	"go-rpi-wifi/exec"
+	"log"
 	"regexp"
 	"strings"
 )
@@ -54,6 +55,7 @@ func (w *Wifi) updateWifiInfo() error {
 	if err != nil {
 		return err
 	} else {
+		log.Printf("ifconfig output: %s\n", string(stdout))
 		// Extract the hw address
 		reHwAddr := regexp.MustCompile(`HWaddr\s([^\s]+)`)
 		if m := reHwAddr.FindAllSubmatch(stdout, -1); m != nil {
