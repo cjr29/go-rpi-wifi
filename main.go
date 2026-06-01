@@ -32,7 +32,9 @@ func main() {
 	} else {
 		log.Printf("Not connected to WIFI - ToDo: Enable AP here!\n")
 		// Call function to get list if available networks and connect to one of them.
-
+		w, err := w.GetAvailableNetworks()
+		fatalOnErr(err)
+		log.Printf("Available networks: %s\n", string(w))
 	}
 }
 
