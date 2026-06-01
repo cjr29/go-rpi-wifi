@@ -20,7 +20,7 @@ Program Aborting
 ////////////////////////////////////////////////////////////////////////////////
 
 func main() {
-	fatalOnErr(checkDependencies())
+	// fatalOnErr(checkDependencies())
 
 	w, err := wifi.New("wlan0", "rpi-config-ap")
 	fatalOnErr(err)
