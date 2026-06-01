@@ -3,11 +3,11 @@ package wifi
 ////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"bytes"
 	"fmt"
 	"go-rpi-wifi/exec"
 	"log"
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -130,8 +130,8 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() ([][]byte, error) {
-	availableSSIDs := [][]byte{}
+func (w *Wifi) GetAvailableNetworks() ([]string, error) {
+	ids := []string{}
 
 	// Execute the Linux network manager command to list available Wi-Fi networks.
 	// sudo nmcli --get-value SSID dev wifi list
@@ -144,8 +144,13 @@ func (w *Wifi) GetAvailableNetworks() ([][]byte, error) {
 		log.Println("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
-	log.Printf("Length of stdout: %d\n", len(stdout))
-	availableSSIDs = bytes.Split(stdout, []byte("\n"))
+	ids = strings.Split(string(stdout), "\n")
 
-	return availableSSIDs, nil
+	// 1. Sort the slice so duplicates sit next to each other
+	slices.Sort(ids)
+
+	// 2. Compact replaces consecutive runs of equal elements
+	ids = slices.Compact(ids)
+
+	return ids, nil
 }
