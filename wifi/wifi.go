@@ -133,7 +133,7 @@ func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 		err    error
 		stdout []byte
 	)
-	stdout, _, err = exec.RunCommand("sudo", "nmcli dev wifi list")
+	stdout, _, err = exec.RunCommand("nmcli", "dev wifi list")
 	// stdout, _, err = exec.RunCommand("ifconfig", w.iface)
 	if err != nil {
 		log.Printf("Error encountered while running nmcli: %s\n", err.Error())
