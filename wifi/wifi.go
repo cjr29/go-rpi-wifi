@@ -137,7 +137,7 @@ func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	} else {
-		log.Printf("nmcli output: %s\n", string(stdout))
+		log.Printf("sudo nmcli output: %s\n", string(stdout))
 	}
 	return stdout, nil
 }
