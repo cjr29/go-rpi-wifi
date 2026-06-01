@@ -63,7 +63,7 @@ func (w *Wifi) updateWifiInfo() error {
 		}
 		log.Printf("Extracted hw addr: %s\n", w.winfo.HWAddr)
 		// Extract the inet address
-		reInetAddr := regexp.MustCompile(`inet addr:([^\s]+)`)
+		reInetAddr := regexp.MustCompile(`inet ([^\s]+)`)
 		if m := reInetAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.InetAddr = string(m[0][1])
 		}
