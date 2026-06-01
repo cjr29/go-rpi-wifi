@@ -129,40 +129,41 @@ func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
 
-func (w *Wifi) GetAvailableNetworks() ([]string, error) {
-	availableSSID := []string{}
+func (w *Wifi) GetAvailableNetworks() ([]byte, error) {
+	// availableSSID := []string{}
 
 	// Execute the Linux network manager command to list available Wi-Fi networks.
-	stdout, _, err := exec.RunCommand("sudo", "nmcli", "dev", "wifi", "list")
+	// sudo nmcli --get-value SSID dev wifi list
+	stdout, _, err := exec.RunCommand("sudo", "nmcli", "--get-value", "SSID", "dev", "wifi", "list")
 	if err != nil {
 		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
 
-	// Regular expression to extract the SSID (Network Name)
-	re := regexp.MustCompile(`ESSID:"([^"]+)"`)
-	matches := re.FindAllStringSubmatch(string(stdout), -1)
+	// // Regular expression to extract the SSID (Network Name)
+	// re := regexp.MustCompile(`ESSID:"([^"]+)"`)
+	// matches := re.FindAllStringSubmatch(string(stdout), -1)
 
-	// Filter unique networks and build result
-	availableNetworks := make(map[string]bool)
-	log.Println("Available Wi-Fi Networks:")
+	// // Filter unique networks and build result
+	// availableNetworks := make(map[string]bool)
+	// log.Println("Available Wi-Fi Networks:")
 
-	for _, match := range matches {
-		if len(match) > 1 {
-			ssid := strings.TrimSpace(match[1])
-			// Only print non-empty, unique SSIDs
-			if ssid != "" && !availableNetworks[ssid] {
-				availableNetworks[ssid] = true
-				log.Printf("- %s\n", ssid)
-				availableSSID = append(availableSSID, ssid)
-			}
-		}
-	}
+	// for _, match := range matches {
+	// 	if len(match) > 1 {
+	// 		ssid := strings.TrimSpace(match[1])
+	// 		// Only print non-empty, unique SSIDs
+	// 		if ssid != "" && !availableNetworks[ssid] {
+	// 			availableNetworks[ssid] = true
+	// 			log.Printf("- %s\n", ssid)
+	// 			availableSSID = append(availableSSID, ssid)
+	// 		}
+	// 	}
+	// }
 
-	if len(availableNetworks) == 0 {
+	if len(stdout) == 0 {
 		log.Println("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
-	return availableSSID, nil
+	return stdout, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
