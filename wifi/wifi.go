@@ -140,7 +140,7 @@ func (w *Wifi) GetAvailableNetworks() (string, error) {
 	} else {
 		log.Printf("nmcli output: %s\n", stdout)
 	}
-	return string(stdout[0]), nil
+	return string(stdout), nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
