@@ -36,6 +36,10 @@ func main() {
 		fatalOnErr(err)
 		log.Printf("Available networks: %s\n", string(w))
 	}
+	avail, err := w.GetAvailableNetworks()
+	fatalOnErr(err)
+	log.Printf("Available networks: %s\n", string(avail))
+
 }
 
 func init() {
