@@ -89,7 +89,7 @@ func (w *Wifi) updateWifiInfo() error {
 		if m := reESSID.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.ESSID = string(m[0][1])
 		}
-		log.Printf("Extracted ESSID: %s\n", w.winfo.ESSID)
+		// log.Printf("Extracted ESSID: %s\n", w.winfo.ESSID)
 		// Check is un-associated still
 		reUnassoc := regexp.MustCompile(`(unassociated)\s+Nick`)
 		if m := reUnassoc.FindAllSubmatch(stdout, -1); m != nil {
