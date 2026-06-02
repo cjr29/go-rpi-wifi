@@ -5,7 +5,6 @@ package main
 import (
 	"go-rpi-wifi/wifi"
 	"log"
-	"strings"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,20 +34,22 @@ func main() {
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
-		// availableSSID is [][]byte; convert each to string for printing
 		ss := make([]string, 0, len(availableSSID))
 		for _, b := range availableSSID {
 			ss = append(ss, string(b))
 		}
-		log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
+		// log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
 	}
-	availableSSID, err := w.GetAvailableNetworks()
+
+	// The following blocks are for testing the regexes to extract info from the nmcli output.
+	/* availableSSID, err := w.GetAvailableNetworks()
 	fatalOnErr(err)
 	ss := make([]string, 0, len(availableSSID))
 	for _, b := range availableSSID {
 		ss = append(ss, string(b))
 	}
-	log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
+	log.Printf("Available networks:\n%s", strings.Join(ss, "\n")) */
+
 }
 
 func init() {
