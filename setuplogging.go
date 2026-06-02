@@ -1,4 +1,4 @@
-package logging
+package main
 
 /*
 	This package creats a custom slog handler without the Keys
@@ -15,24 +15,18 @@ import (
 	"sync"
 )
 
-const (
-	Logging  = true            // Always on for logging. Set level with LogLevel property
-	LogLevel = slog.LevelDebug // Change to Error for production
-)
-
-var log *slog.Logger
-
 type SlogHandler struct {
 	h   slog.Handler
 	mu  *sync.Mutex
 	out io.Writer
 }
 
-func ConfigureLogging() *slog.Logger {
+func ConfigureLogging(logLevel slog.Level, logging bool) *slog.Logger {
 	var programLevel = new(slog.LevelVar)
-	programLevel.Set(LogLevel)
+	programLevel.Set(logLevel)
+	// Send to stdout, could be a file or other io.Writer
 	log := slog.New(SlogNewHandler(os.Stdout, &slog.HandlerOptions{Level: programLevel, AddSource: false}))
-	if Logging {
+	if logging {
 		log.Debug("Log handler configured.")
 	}
 	return log

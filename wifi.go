@@ -1,10 +1,9 @@
-package wifi
+package main
 
 ////////////////////////////////////////////////////////////////////////////////
 
 import (
 	"fmt"
-	"go-rpi-wifi/exec"
 	"regexp"
 	"slices"
 	"strings"
@@ -28,7 +27,7 @@ type Wifi struct {
 	winfo  *info
 }
 
-func New(iface string, apName string) (*Wifi, error) {
+func NewWifi(iface string, apName string) (*Wifi, error) {
 	return &Wifi{
 		iface:  iface,
 		apName: apName,
@@ -52,7 +51,7 @@ func (w *Wifi) updateWifiInfo() error {
 	w.winfo = &info{}
 
 	// Run ifconfig
-	stdout, _, err = exec.RunCommand("ifconfig", w.iface)
+	stdout, _, err = RunCommand("ifconfig", w.iface)
 	if err != nil {
 		return err
 	} else {
@@ -72,7 +71,7 @@ func (w *Wifi) updateWifiInfo() error {
 	}
 
 	// Run iwconfig
-	stdout, _, err = exec.RunCommand("iwconfig", w.iface)
+	stdout, _, err = RunCommand("iwconfig", w.iface)
 	if err != nil {
 		return err
 	} else {
@@ -128,8 +127,6 @@ func (w *Wifi) GetESSID() string {
 	return w.winfo.ESSID
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 func (w *Wifi) RescanInfo() error {
 	return w.updateWifiInfo()
 }
@@ -139,13 +136,13 @@ func (w *Wifi) GetAvailableNetworks() ([]string, error) {
 
 	// Execute the Linux network manager command to list available Wi-Fi networks.
 	// sudo nmcli --get-value SSID dev wifi list
-	stdout, _, err := exec.RunCommand("sudo", "nmcli", "--get-value", "SSID", "dev", "wifi", "list")
+	stdout, _, err := RunCommand("sudo", "nmcli", "--get-value", "SSID", "dev", "wifi", "list")
 	if err != nil {
 		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
 
 	if len(stdout) == 0 {
-		log.Info("No networks found. Check if your Wi-Fi interface is up.")
+		Log.Info("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
 	ids = strings.Split(string(stdout), "\n")

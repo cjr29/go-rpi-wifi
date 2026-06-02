@@ -1,34 +1,36 @@
 package main
 
-////////////////////////////////////////////////////////////////////////////////
-
 import (
 	"fmt"
-	"go-rpi-wifi/wifi"
+	"log/slog"
 )
 
-////////////////////////////////////////////////////////////////////////////////
+const (
+	Logging  = true            // Always on for logging. Set level with LogLevel property
+	LogLevel = slog.LevelDebug // Change to Error for production
+)
+
+var Log *slog.Logger
 
 func fatalOnErr(err error) {
 	if err != nil {
-		log.Error(fmt.Sprintf("Fatal error encountered : %v. Program Aborting", err))
+		Log.Error(fmt.Sprintf("Fatal error encountered : %v. Program Aborting", err))
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 func main() {
-	// fatalOnErr(checkDependencies())
+	// Configure logging
+	Log = ConfigureLogging(LogLevel, Logging)
 
-	w, err := wifi.New("wlan0", "rpi-config-ap")
+	w, err := NewWifi("wlan0", "rpi-config-ap")
 	fatalOnErr(err)
 
 	fatalOnErr(w.RescanInfo())
 
 	if w.IsConnectedToNetwork() {
-		log.Info("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP())
+		Log.Info("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP())
 	} else {
-		log.Error("Not connected to WIFI - ToDo: Enable AP here!\n")
+		Log.Error("Not connected to WIFI - ToDo: Enable AP here!\n")
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
