@@ -12,12 +12,15 @@
 					"CGO_ENABLED": "0"
 				}
 			},
-			"group": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 			"presentation": {
 				"reveal": "always",
 				"panel": "new"
 			},
 			"problemMatcher": []
-		},
+		}
 	]
 }

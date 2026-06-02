@@ -15,6 +15,13 @@ import (
 	"sync"
 )
 
+const (
+	Logging  = true            // Always on for logging. Set level with LogLevel property
+	LogLevel = slog.LevelDebug // Change to Error for production
+)
+
+var log *slog.Logger
+
 type SlogHandler struct {
 	h   slog.Handler
 	mu  *sync.Mutex

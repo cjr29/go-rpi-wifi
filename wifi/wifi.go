@@ -5,7 +5,6 @@ package wifi
 import (
 	"fmt"
 	"go-rpi-wifi/exec"
-	"log"
 	"regexp"
 	"slices"
 	"strings"
@@ -146,7 +145,7 @@ func (w *Wifi) GetAvailableNetworks() ([]string, error) {
 	}
 
 	if len(stdout) == 0 {
-		log.Println("No networks found. Check if your Wi-Fi interface is up.")
+		log.Info("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
 	ids = strings.Split(string(stdout), "\n")

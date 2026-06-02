@@ -3,17 +3,15 @@ package main
 ////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"fmt"
 	"go-rpi-wifi/wifi"
-	"log"
 )
 
 ////////////////////////////////////////////////////////////////////////////////
 
 func fatalOnErr(err error) {
 	if err != nil {
-		log.Fatalf(`Fatal error encountered : %s.
-Program Aborting
-`, err.Error())
+		log.Error(fmt.Sprintf("Fatal error encountered : %v. Program Aborting", err))
 	}
 }
 
@@ -28,9 +26,9 @@ func main() {
 	fatalOnErr(w.RescanInfo())
 
 	if w.IsConnectedToNetwork() {
-		log.Printf("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP())
+		log.Info("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP())
 	} else {
-		log.Printf("Not connected to WIFI - ToDo: Enable AP here!\n")
+		log.Error("Not connected to WIFI - ToDo: Enable AP here!\n")
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
@@ -41,7 +39,7 @@ func main() {
 		// log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
 	}
 
-	// The following blocks are for testing the regexes to extract info from the nmcli output.
+	// The following blocks are for testing extract info from the nmcli output.
 	/* availableSSID, err := w.GetAvailableNetworks()
 	fatalOnErr(err)
 	ss := make([]string, 0, len(availableSSID))
@@ -50,11 +48,6 @@ func main() {
 	}
 	log.Printf("Available networks:\n%s", strings.Join(ss, "\n")) */
 
-}
-
-func init() {
-	log.SetPrefix("")
-	log.SetFlags(0)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
