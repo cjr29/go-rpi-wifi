@@ -57,19 +57,19 @@ func (w *Wifi) updateWifiInfo() error {
 	if err != nil {
 		return err
 	} else {
-		log.Printf("ifconfig output: %s\n", string(stdout))
+		// log.Printf("ifconfig output: %s\n", string(stdout))
 		// Extract the hw address
 		reHwAddr := regexp.MustCompile(`HWaddr\s([^\s]+)`)
 		if m := reHwAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.HWAddr = string(m[0][1])
 		}
-		log.Printf("Extracted hw addr: %s\n", w.winfo.HWAddr)
+		// log.Printf("Extracted hw addr: %s\n", w.winfo.HWAddr)
 		// Extract the inet address
 		reInetAddr := regexp.MustCompile(`inet ([^\s]+)`)
 		if m := reInetAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.InetAddr = string(m[0][1])
 		}
-		log.Printf("Extracted inet addr: %s\n", w.winfo.InetAddr)
+		// log.Printf("Extracted inet addr: %s\n", w.winfo.InetAddr)
 	}
 
 	// Run iwconfig
@@ -77,13 +77,13 @@ func (w *Wifi) updateWifiInfo() error {
 	if err != nil {
 		return err
 	} else {
-		log.Printf("iwconfig output: %s\n", string(stdout))
+		// log.Printf("iwconfig output: %s\n", string(stdout))
 		// Extract the access point name (upstream)
 		reAPAddr := regexp.MustCompile(`Access Point:\s([^\s]+)`)
 		if m := reAPAddr.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.APAddr = string(m[0][1])
 		}
-		log.Printf("Extracted AP addr: %s\n", w.winfo.APAddr)
+		// log.Printf("Extracted AP addr: %s\n", w.winfo.APAddr)
 		// Extract the ESSID
 		reESSID := regexp.MustCompile(`ESSID:\"([^\"]+)\"`)
 		if m := reESSID.FindAllSubmatch(stdout, -1); m != nil {
@@ -95,7 +95,7 @@ func (w *Wifi) updateWifiInfo() error {
 		if m := reUnassoc.FindAllSubmatch(stdout, -1); m != nil {
 			w.winfo.IsUnassociated = true
 		}
-		log.Printf("Extracted is unassociated: %t\n", w.winfo.IsUnassociated)
+		// log.Printf("Extracted is unassociated: %t\n", w.winfo.IsUnassociated)
 	}
 
 	return nil
@@ -122,6 +122,11 @@ func (w *Wifi) IsAccessPoint() bool {
 // Return the currently set inet addr.
 func (w *Wifi) GetIP() string {
 	return w.winfo.InetAddr
+}
+
+// Return the currently set ESSID.
+func (w *Wifi) GetESSID() string {
+	return w.winfo.ESSID
 }
 
 ////////////////////////////////////////////////////////////////////////////////
