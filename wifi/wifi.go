@@ -135,7 +135,7 @@ func (w *Wifi) GetAvailableNetworks() ([]string, error) {
 
 	// Execute the Linux network manager command to list available Wi-Fi networks.
 	// sudo nmcli --get-value SSID dev wifi list
-	stdout, _, err := exec.RunCommand("sudo", "nmcli", "--get-value", "SSID", "dev", "wifi", "list")
+	stdout, _, err := exec.RunCommand("sudo", "nmcli", "--get-value", "SSID,SIGNAL", "dev", "wifi", "list")
 	if err != nil {
 		return nil, fmt.Errorf("failed to scan networks: %w", err)
 	}
