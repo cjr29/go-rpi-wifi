@@ -142,7 +142,7 @@ func (w *Wifi) GetAvailableNetworks() ([]string, error) {
 	}
 
 	if len(stdout) == 0 {
-		Log.Info("No networks found. Check if your Wi-Fi interface is up.")
+		logAll.Info("No networks found. Check if your Wi-Fi interface is up.")
 	}
 
 	ids = strings.Split(string(stdout), "\n")

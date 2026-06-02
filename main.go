@@ -10,17 +10,17 @@ const (
 	LogLevel = slog.LevelDebug // Change to Error for production
 )
 
-var Log *slog.Logger
+var logAll *slog.Logger
 
 func fatalOnErr(err error) {
 	if err != nil {
-		Log.Error(fmt.Sprintf("Fatal error encountered : %v. Program Aborting", err))
+		logAll.Error(fmt.Sprintf("Fatal error encountered : %v. Program Aborting", err))
 	}
 }
 
 func main() {
 	// Configure logging
-	Log = ConfigureLogging(LogLevel, Logging)
+	logAll = ConfigureLogging(LogLevel, Logging)
 
 	w, err := NewWifi("wlan0", "rpi-config-ap")
 	fatalOnErr(err)
@@ -28,9 +28,9 @@ func main() {
 	fatalOnErr(w.RescanInfo())
 
 	if w.IsConnectedToNetwork() {
-		Log.Info("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP())
+		logAll.Info(fmt.Sprintf("Connected to wireless network %s with IP: %s\n", w.GetESSID(), w.GetIP()))
 	} else {
-		Log.Error("Not connected to WIFI - ToDo: Enable AP here!\n")
+		logAll.Error("Not connected to WIFI - ToDo: Enable AP here!\n")
 		// Call function to get list if available networks and connect to one of them.
 		availableSSID, err := w.GetAvailableNetworks()
 		fatalOnErr(err)
@@ -38,7 +38,7 @@ func main() {
 		for _, b := range availableSSID {
 			ss = append(ss, string(b))
 		}
-		// log.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
+		// logAll.Printf("Available networks:\n%s", strings.Join(ss, "\n"))
 	}
 
 	// The following blocks are for testing extract info from the nmcli output.
@@ -48,7 +48,7 @@ func main() {
 	for _, b := range availableSSID {
 		ss = append(ss, string(b))
 	}
-	log.Printf("Available networks:\n%s", strings.Join(ss, "\n")) */
+	logAll.Printf("Available networks:\n%s", strings.Join(ss, "\n")) */
 
 }
 
